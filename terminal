@@ -4,5 +4,19 @@ npx create-next-app@latest nav-site --typescript --tailwind --app
 cd nav-site
 
 # 安装必要的依赖
-npm install @notionhq/client clsx tailwind-merge lucide-react
+npm install -D @types/node @types/react @types/react-dom typescript
+npm install clsx tailwind-merge lucide-react
+npm install @notionhq/client
+
+# 安装类型声明文件
 npm install -D @types/node @types/react @types/react-dom 
+
+# 删除旧的依赖和构建文件
+rm -rf node_modules .next
+rm package-lock.json
+
+# 重新安装依赖
+npm install
+
+# 构建项目
+npm run build 
