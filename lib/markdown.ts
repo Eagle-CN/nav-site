@@ -1,19 +1,19 @@
-import fs from 'fs';
-import path from 'path';
+import { readFileSync, readdirSync } from 'fs';
+import { join } from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
 import { Category, Site } from '@/types';
 
-const contentDirectory = path.join(process.cwd(), 'content');
+const contentDirectory = join(process.cwd(), 'content');
 
 export async function getAllCategories(): Promise<Category[]> {
-  const fileNames = fs.readdirSync(contentDirectory);
+  const fileNames = readdirSync(contentDirectory);
   
   const categories = await Promise.all(
     fileNames.map(async (fileName) => {
-      const fullPath = path.join(contentDirectory, fileName);
-      const fileContents = fs.readFileSync(fullPath, 'utf8');
+      const fullPath = join(contentDirectory, fileName);
+      const fileContents = readFileSync(fullPath, 'utf8');
       
       const { data, content } = matter(fileContents);
       
