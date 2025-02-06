@@ -1,1 +1,8 @@
- 
+# 创建新项目
+npx create-next-app@latest nav-site --typescript --tailwind --app
+
+cd nav-site
+
+# 安装必要的依赖
+npm install @notionhq/client clsx tailwind-merge lucide-react
+npm install -D @types/node @types/react @types/react-dom 
