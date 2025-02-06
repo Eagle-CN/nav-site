@@ -10,4 +10,15 @@ export interface Category {
   description: string;
   order: number;
   sites: Site[];
+}
+
+export interface NotionPage {
+  id: string;
+  properties: {
+    Name: { title: Array<{ plain_text: string }> };
+    Description: { rich_text: Array<{ plain_text: string }> };
+    URL: { url: string };
+    Icon: { files: Array<{ file: { url: string } }> };
+    Order: { number: number };
+  };
 } 

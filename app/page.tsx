@@ -1,10 +1,10 @@
 import React from 'react';
-import { getAllCategories } from '@/lib/data';
+import { getCategoriesFromNotion } from '@/lib/notion';
 import CategoryNav from '@/components/CategoryNav';
 import SiteCard from '@/components/SiteCard';
 
 export default async function Home() {
-  const categories = await getAllCategories();
+  const categories = await getCategoriesFromNotion();
   
   return (
     <main className="container mx-auto px-4">
