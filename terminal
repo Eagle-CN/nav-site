@@ -3,3 +3,4 @@ cd nav-site
 npm install gray-matter remark remark-html @types/node @types/react @types/react-dom -D
 npm install @types/node @types/react @types/react-dom -D
 npm install 
+mkdir -p public/icons 
