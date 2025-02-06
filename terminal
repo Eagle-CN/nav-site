@@ -1,0 +1,4 @@
+npx create-next-app@latest nav-site --typescript --tailwind --app
+cd nav-site
+npm install gray-matter remark remark-html @types/node @types/react @types/react-dom -D
+npm install @types/node @types/react @types/react-dom -D 
