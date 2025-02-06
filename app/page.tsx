@@ -1,5 +1,5 @@
 import React from 'react';
-import { getAllCategories } from '@/lib/markdown';
+import { getAllCategories } from '@/lib/data';
 import CategoryNav from '@/components/CategoryNav';
 import SiteCard from '@/components/SiteCard';
 
