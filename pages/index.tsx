@@ -209,7 +209,7 @@ export default function Home({ categories, navItems, coverUrl, pageTitle, pageDe
                     {item.title}
                   </h3>
                   {item.description && (
-                    <p className="text-sm text-slate-500 line-clamp-2 group-hover:text-slate-600">
+                    <p className="text-sm text-slate-500 truncate group-hover:text-slate-600">
                       {item.description}
                     </p>
                   )}
@@ -238,10 +238,22 @@ export default function Home({ categories, navItems, coverUrl, pageTitle, pageDe
 export const getStaticProps: GetStaticProps = async () => {
   try {
     const { categories, navItems, coverUrl, pageTitle } = await getNotionData()
+    
+    // 过滤掉不需要暴露的数据
+    const sanitizedNavItems = navItems.map((item: NavItem) => ({
+      id: item.id,
+      title: item.title,
+      url: item.url,
+      description: item.description,
+      icon: item.icon,
+      categories: item.categories,
+      recommend: item.recommend
+    }))
+
     return {
       props: {
         categories,
-        navItems,
+        navItems: sanitizedNavItems,
         coverUrl,
         pageTitle
       },

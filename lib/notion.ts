@@ -55,8 +55,19 @@ export async function getNotionData() {
       categories: Array.isArray(item.Category) 
         ? item.Category.map((cat: string) => cat.trim()) 
         : (item.Category || '').split(',').map((cat: string) => cat.trim()),
-      recommend: item.Recommend || ''
-    }))
+      recommend: item.Recommend || '',
+      order: item.Order === undefined || item.Order === '' ? 9999 : parseInt(item.Order) // 修改默认值逻辑
+    })).sort((a: NavItem, b: NavItem) => {
+      // 首先按照是否有角标排序
+      if (a.recommend && !b.recommend) return -1
+      if (!a.recommend && b.recommend) return 1
+      
+      // 如果角标状态相同，则按照序号排序（包括0）
+      if (a.order === b.order) return 0
+      if (a.order === 9999) return 1
+      if (b.order === 9999) return -1
+      return a.order - b.order
+    })
 
     return {
       pageTitle,

@@ -6,6 +6,7 @@ export interface NavItem {
   icon: string
   categories: string[]
   recommend: string
+  order: number
 }
 
 export interface Category {
