@@ -12,6 +12,8 @@ export default function Document() {
             style-src 'self' 'unsafe-inline';
             img-src 'self' https://images.unsplash.com data:;"
         />
+        <title>A导航 - 一个小巧的导航网站</title>
+        <meta name="description" content="一个小巧的导航网站"/>
       </Head>
       <body>
         <Main />
