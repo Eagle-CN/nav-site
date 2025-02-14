@@ -3,6 +3,12 @@ import { NavItem, Category } from '../types/notion'
 const NOTION_PAGE_ID = process.env.NOTION_PAGE_ID
 const DEFAULT_COVER = 'https://images.unsplash.com/photo-1707343843437-caacff5cfa74?q=80&w=2940' // 使用 Unsplash 的图片
 
+// 从环境变量读取分类顺序，格式如：云算力,API,AI,学习资源,开发工具,工具合集
+const categoryOrder = (process.env.CATEGORY_ORDER || '').split(',')
+const CATEGORY_ORDER = Object.fromEntries(
+  categoryOrder.map((cat, index) => [cat.trim(), index + 1])
+)
+
 // 使用Notion公开API获取数据
 export async function getNotionData() {
   if (!NOTION_PAGE_ID) {
@@ -35,16 +41,31 @@ export async function getNotionData() {
     const data = await res.json()
     console.log('Table Data:', JSON.stringify(data, null, 2))
     
-    // 处理数据,提取所有分类
-    const categoriesSet = new Set(
-      data.flatMap((item: any) => {
-        const cats = item.Category
-        return Array.isArray(cats) ? cats : (cats || '').split(',')
-      }).map((cat: string) => cat.trim()).filter(Boolean)
-    )
-    const categories = Array.from(categoriesSet)
-    console.log('Categories:', categories)
+    // 使用Map来保持分类的顺序并去重
+    const categoriesMap = new Map()
+    data.forEach((item: any) => {
+      const cats = Array.isArray(item.Category) 
+        ? item.Category 
+        : (item.Category || '').split(',')
+      
+      cats.forEach((cat: string) => {
+        const trimmedCat = cat.trim()
+        if (trimmedCat && !categoriesMap.has(trimmedCat)) {
+          categoriesMap.set(trimmedCat, true)
+        }
+      })
+    })
     
+    // 转换为所需的格式并排序
+    const categories = Array.from(categoriesMap.keys())
+      .map(name => ({
+        id: name,
+        name: name,
+        order: CATEGORY_ORDER[name] || 999 // 未定义顺序的分类放到最后
+      }))
+      .sort((a, b) => a.order - b.order)
+      .map(({ id, name }) => ({ id, name })) // 移除order字段
+
     // 格式化导航项，支持多分类
     const navItems = data.map((item: any) => ({
       id: item.id || String(Math.random()),
@@ -73,10 +94,7 @@ export async function getNotionData() {
       pageTitle,
       pageDescription: '', // 返回空字符串作为描述
       coverUrl: DEFAULT_COVER,
-      categories: categories.map(name => ({
-        id: name,
-        name: name,
-      })),
+      categories,
       navItems
     }
   } catch (error) {
